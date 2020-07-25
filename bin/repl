@@ -98,7 +98,12 @@ loop do
   if from_stdin
     run = "echo \"%s\" | #{command}" % [ line, nil ]
   else
-    run = "#{command} %s" % [ line, nil ]
+    if line =~ /^!/
+      line[0] = ''
+      run = "#{line} 2>&1"
+    else
+      run = "#{command} %s" % [ line, nil ]
+    end
   end
   puts "$ #{run}" if debug
   system run
